@@ -2,6 +2,8 @@
 /build/
 .idea
 JavaAppiumAutomation.iml
+out/
+
 
 # Ignore Gradle GUI config
 gradle-app.setting
