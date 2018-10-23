@@ -191,6 +191,40 @@ public class FirstTest {
 
   }
 
+  @Test
+  public void searchForAllMatchesOfWord() {
+    String word = "bmw";
+
+    waitForElementAndClick(
+            By.id("org.wikipedia:id/search_container"),
+            "Can't find 'Search Wikipedia' input",
+            5
+    );
+
+    waitForElementAndSendKeys(
+            By.id("org.wikipedia:id/search_src_text"),
+            word,
+            "Can't find search input field",
+            5
+    );
+
+    waitForElementPresent(
+            By.id("org.wikipedia:id/page_list_item_title"),
+            "Can't find results for the given word",
+            15
+    );
+
+    ifTitlesHaveSpecificWord(
+            By.id("org.wikipedia:id/page_list_item_title"),
+            word,
+            sizeOfTitles(By.id("org.wikipedia:id/page_list_item_title"))
+    );
+
+  }
+
+  private int sizeOfTitles(By by) {
+    return driver.findElements(by).size();
+  }
 
   private boolean ifTitlesHaveSpecificWord(By by, String word, int howManyMatchesToCheck) {
     List<WebElement> all_title_elements = driver.findElements(by);
