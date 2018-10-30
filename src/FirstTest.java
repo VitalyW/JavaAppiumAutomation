@@ -12,8 +12,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class FirstTest {
 
@@ -131,6 +134,112 @@ public class FirstTest {
             title_text
     );
 
+  }
+
+  @Test
+  public void compareSearchFieldText() {
+    waitForElementAndClick(
+            By.id("org.wikipedia:id/search_container"),
+            "Can't find 'Search Wikipedia' input",
+            5
+    );
+
+    WebElement search_field_input = waitForElementPresent(
+            By.id("org.wikipedia:id/search_src_text"),
+            "Can't find search input field",
+            15
+    );
+
+    String search_field_input_text = search_field_input.getAttribute("text");
+
+    assertEquals(
+            "Text don't match",
+            "Search…",
+            search_field_input_text
+    );
+
+  }
+
+  @Test
+  public void searchForWordAndCancel() {
+    String word = "mercedes";
+
+    waitForElementAndClick(
+            By.id("org.wikipedia:id/search_container"),
+            "Can't find 'Search Wikipedia' input",
+            5
+    );
+
+    waitForElementAndSendKeys(
+            By.id("org.wikipedia:id/search_src_text"),
+            word,
+            "Can't find search input field",
+            5
+    );
+
+    waitForElementPresent(
+            By.id("org.wikipedia:id/page_list_item_title"),
+            "Can't find results for the given word",
+            15
+    );
+
+    ifTitlesHaveSpecificWord(
+            By.id("org.wikipedia:id/page_list_item_title"),
+            word,
+            3
+    );
+
+  }
+
+  @Test
+  public void searchForAllMatchesOfWord() {
+    String word = "bmw";
+
+    waitForElementAndClick(
+            By.id("org.wikipedia:id/search_container"),
+            "Can't find 'Search Wikipedia' input",
+            5
+    );
+
+    waitForElementAndSendKeys(
+            By.id("org.wikipedia:id/search_src_text"),
+            word,
+            "Can't find search input field",
+            5
+    );
+
+    waitForElementPresent(
+            By.id("org.wikipedia:id/page_list_item_title"),
+            "Can't find results for the given word",
+            15
+    );
+
+    ifTitlesHaveSpecificWord(
+            By.id("org.wikipedia:id/page_list_item_title"),
+            word,
+            sizeOfTitles(By.id("org.wikipedia:id/page_list_item_title"))
+    );
+
+  }
+
+  private int sizeOfTitles(By by) {
+    return driver.findElements(by).size();
+  }
+
+  private boolean ifTitlesHaveSpecificWord(By by, String word, int howManyMatchesToCheck) {
+    List<WebElement> all_title_elements = driver.findElements(by);
+    List<String> all_title_elements_text = new ArrayList<>();
+
+    for (int i = 0; i < howManyMatchesToCheck; i++) {
+      all_title_elements_text.add(all_title_elements.get(i).getAttribute("text").trim().toLowerCase());
+    }
+
+    for (String title_text : all_title_elements_text) {
+      if (title_text.contains(word)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private WebElement waitForElementPresent(By by, String error_message, int timeoutInSeconds) {
