@@ -42,6 +42,7 @@ public class FirstTest {
 
   @After
   public void tearDown() {
+    setDeviceToPortraitMode();
     driver.quit();
   }
 
@@ -517,7 +518,7 @@ public class FirstTest {
     );
 
   }
-  
+
   private String waitForElementAndGetAttribute(By by, String attribute, String error_message, int timeOut) {
     WebElement element = waitForElementPresent(by, error_message, timeOut);
     return element.getAttribute(attribute);
@@ -649,6 +650,13 @@ public class FirstTest {
     WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
     element.clear();
     return element;
+  }
+
+  private void setDeviceToPortraitMode() {
+    ScreenOrientation orientation = driver.getOrientation();
+    if (! orientation.toString().toLowerCase().equals("portrait")) {
+      driver.rotate(ScreenOrientation.PORTRAIT);
+    }
   }
 
 }
