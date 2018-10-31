@@ -356,6 +356,89 @@ public class FirstTest {
 
   }
 
+  @Test
+  public void testAmountOfNotEmptySearch() {
+    waitForElementAndClick(
+            By.id("org.wikipedia:id/search_container"),
+            "Can't find 'Search Wikipedia' input",
+            5
+    );
+
+    String search_feild = "linkin park discography";
+
+    waitForElementAndSendKeys(
+            By.id("org.wikipedia:id/search_src_text"),
+            search_feild,
+            "Can't find search input field",
+            5
+    );
+
+    String search_result_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']";
+
+    waitForElementPresent(
+            By.xpath(search_result_locator),
+            "Cannot find anything by the given request " + search_feild,
+            15
+    );
+
+    int amount_of_search_results = getAmountOfElements(
+            By.xpath(search_result_locator)
+    );
+    assertTrue(
+            "We found too few results",
+            amount_of_search_results > 0
+    );
+
+  }
+
+  @Test
+  public void testAmountOfEmptySearch() {
+    waitForElementAndClick(
+            By.id("org.wikipedia:id/search_container"),
+            "Can't find 'Search Wikipedia' input",
+            5
+    );
+
+    String search_line = "xsdfcghvbjnknb";
+
+    waitForElementAndSendKeys(
+            By.id("org.wikipedia:id/search_src_text"),
+            search_line,
+            "Can't find search input field",
+            5
+    );
+
+    String search_result_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']";
+    String empty_result_label = "org.wikipedia:id/search_empty_text";
+
+    waitForElementPresent(
+           By.id(empty_result_label),
+           "Cannot find empty result label by the request: " + search_line,
+           15
+    );
+
+    assertElementNotPresent(
+            By.xpath(search_result_locator),
+            "We have found some results by the request: " + search_line
+    );
+
+  }
+
+
+
+  private void assertElementNotPresent(By by, String error_message) {
+    int amount_of_elements = getAmountOfElements(by);
+    if (amount_of_elements > 0) {
+      String default_message = "An element " + by.toString() + " is not supposed to be present!";
+      throw new AssertionError(default_message + " " + error_message);
+    }
+  }
+
+  private int getAmountOfElements(By by) {
+    List elements = driver.findElements(by);
+    return elements.size();
+  }
+
   private void swipeElementToLeft(By by, String error_message) {
     WebElement element = waitForElementPresent(
             by,
