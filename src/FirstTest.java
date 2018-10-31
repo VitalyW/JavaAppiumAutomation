@@ -487,7 +487,37 @@ public class FirstTest {
 
   }
 
+  @Test
+  public void testCheckSearchArticleInBackground() {
+    waitForElementAndClick(
+            By.id("org.wikipedia:id/search_container"),
+            "Can't find 'Search Wikipedia' input",
+            5
+    );
 
+    waitForElementAndSendKeys(
+            By.id("org.wikipedia:id/search_src_text"),
+            "Java",
+            "Can't find search input field",
+            5
+    );
+
+    waitForElementPresent(
+            By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+            "Can't find 'Search Wikipedia' input",
+            10
+    );
+
+    driver.runAppInBackground(3);
+
+    waitForElementPresent(
+            By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+            "Cannot find article after returning from backgroun",
+            10
+    );
+
+  }
+  
   private String waitForElementAndGetAttribute(By by, String attribute, String error_message, int timeOut) {
     WebElement element = waitForElementPresent(by, error_message, timeOut);
     return element.getAttribute(attribute);
