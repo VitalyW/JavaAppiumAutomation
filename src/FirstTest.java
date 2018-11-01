@@ -519,12 +519,48 @@ public class FirstTest {
 
   }
 
+  @Test
+  public void assertArticleHasTitle() {
+    waitForElementAndClick(
+            By.id("org.wikipedia:id/search_container"),
+            "Can't find 'Search Wikipedia' input",
+            5
+    );
+
+    String search_line = "Java";
+
+    waitForElementAndSendKeys(
+            By.id("org.wikipedia:id/search_src_text"),
+            search_line,
+            "Can't find search input field",
+            5
+    );
+
+    waitForElementAndClick(
+            By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+            "Cannot find 'Object-oriented programming language' article searching by " + search_line,
+            10
+    );
+
+    assertElementPresent(
+            By.id("org.wikipedia:id/view_page_title_text"),
+            "This article has no title element"
+    );
+
+  }
+
+  private void assertElementPresent(By by, String error_message) {
+    int amount_of_elements = getAmountOfElements(by);
+    if (amount_of_elements == 0) {
+      String default_message = "An element " + by.toString() + " is supposed to be present!";
+      throw new AssertionError(default_message + " " + error_message);
+    }
+  }
+
   private String waitForElementAndGetAttribute(By by, String attribute, String error_message, int timeOut) {
     WebElement element = waitForElementPresent(by, error_message, timeOut);
     return element.getAttribute(attribute);
   }
-
-
 
   private void assertElementNotPresent(By by, String error_message) {
     int amount_of_elements = getAmountOfElements(by);
