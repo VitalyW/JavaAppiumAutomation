@@ -38,11 +38,11 @@ public class FirstTest {
     capabilities.setCapability("app", "/Users/vitalykhuzeev/Documents/Code/JavaAppiumAutomation/apks/org.wikipedia.apk");
 
     driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+    driver.rotate(ScreenOrientation.PORTRAIT);
   }
 
   @After
   public void tearDown() {
-    setDeviceToPortraitMode();
     driver.quit();
   }
 
@@ -650,13 +650,6 @@ public class FirstTest {
     WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
     element.clear();
     return element;
-  }
-
-  private void setDeviceToPortraitMode() {
-    ScreenOrientation orientation = driver.getOrientation();
-    if (! orientation.toString().toLowerCase().equals("portrait")) {
-      driver.rotate(ScreenOrientation.PORTRAIT);
-    }
   }
 
 }
