@@ -11,7 +11,8 @@ public class SearchPageObject extends MainPageObject {
             SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
             SEARCH_RESULT_BY_STRING_TPL= "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
             SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
-            SEARCH_EMPTY_RESULT_ELEMENT = "org.wikipedia:id/search_empty_text";
+            SEARCH_EMPTY_RESULT_ELEMENT = "org.wikipedia:id/search_empty_text",
+            SEARCH_LIST_ITEM_TITLE = "org.wikipedia:id/page_list_item_title";
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
@@ -73,6 +74,30 @@ public class SearchPageObject extends MainPageObject {
 
     public void assertThereIsNoResultOfSearch() {
         this.assertElementNotPresent(By.xpath(SEARCH_EMPTY_RESULT_ELEMENT), "We are supposed to not find any results");
+    }
+
+    public void waitForListItemTitleToAppear() {
+        this.waitForElementPresent(
+                By.id(SEARCH_LIST_ITEM_TITLE),
+                "Can't find item titles",
+                15
+        );
+    }
+
+    public void checkIfItemTitleHasSpecifiedWord(String word, int howManyItemTitlesToCheck) {
+        this.ifTitlesHaveSpecificWord(
+                By.id(SEARCH_LIST_ITEM_TITLE),
+                word,
+                howManyItemTitlesToCheck
+        );
+    }
+
+    public void checkIfAllItemTitlesHaveSpecifiedWord(String word) {
+        this.ifTitlesHaveSpecificWord(
+                By.id(SEARCH_LIST_ITEM_TITLE),
+                word,
+                this.sizeOfTitles(By.id(SEARCH_LIST_ITEM_TITLE))
+        );
     }
 
 }
