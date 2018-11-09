@@ -178,32 +178,11 @@ public class FirstTest extends CoreTestCase {
 
   @Test
   public void testAmountOfNotEmptySearch() {
-    MainPageObject.waitForElementAndClick(
-            By.id("org.wikipedia:id/search_container"),
-            "Can't find 'Search Wikipedia' input",
-            5
-    );
-
-    String search_feild = "linkin park discography";
-
-    MainPageObject.waitForElementAndSendKeys(
-            By.id("org.wikipedia:id/search_src_text"),
-            search_feild,
-            "Can't find search input field",
-            5
-    );
-
-    String search_result_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']";
-
-    MainPageObject.waitForElementPresent(
-            By.xpath(search_result_locator),
-            "Cannot find anything by the given request " + search_feild,
-            15
-    );
-
-    int amount_of_search_results = MainPageObject.getAmountOfElements(
-            By.xpath(search_result_locator)
-    );
+    SearchPageObject SearchPageObject = new SearchPageObject(driver);
+    SearchPageObject.initSearchInput();
+    String search_field = "linkin park discography";
+    SearchPageObject.typeSearchLine(search_field);
+    int amount_of_search_results = SearchPageObject.getAmountOfFoundArticles();
     assertTrue(
             "We found too few results",
             amount_of_search_results > 0
@@ -213,34 +192,12 @@ public class FirstTest extends CoreTestCase {
 
   @Test
   public void testAmountOfEmptySearch() {
-    MainPageObject.waitForElementAndClick(
-            By.id("org.wikipedia:id/search_container"),
-            "Can't find 'Search Wikipedia' input",
-            5
-    );
-
-    String search_line = "xsdfcghvbjnknb";
-
-    MainPageObject.waitForElementAndSendKeys(
-            By.id("org.wikipedia:id/search_src_text"),
-            search_line,
-            "Can't find search input field",
-            5
-    );
-
-    String search_result_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']";
-    String empty_result_label = "org.wikipedia:id/search_empty_text";
-
-    MainPageObject.waitForElementPresent(
-           By.id(empty_result_label),
-           "Cannot find empty result label by the request: " + search_line,
-           15
-    );
-
-    MainPageObject.assertElementNotPresent(
-            By.xpath(search_result_locator),
-            "We have found some results by the request: " + search_line
-    );
+    SearchPageObject SearchPageObject = new SearchPageObject(driver);
+    SearchPageObject.initSearchInput();
+    String search_field = "xsdfcghvbjnknb";
+    SearchPageObject.typeSearchLine(search_field);
+    SearchPageObject.waitForEmptyResultsLabel();
+    SearchPageObject.assertThereIsNoResultOfSearch();
 
   }
 
