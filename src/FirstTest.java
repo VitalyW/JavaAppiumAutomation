@@ -13,7 +13,6 @@ public class FirstTest extends CoreTestCase {
   }
 
 
-
   @Test
   public void testSearchForWordAndCancel() {
     String word = "mercedes";
