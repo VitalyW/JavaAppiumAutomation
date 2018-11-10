@@ -36,5 +36,15 @@ public class ArticleTests extends CoreTestCase {
         ArticlePageObject.swipeToFooter();
     }
 
+    @Test
+    public void testAssertArticleHasTitle() {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        String search_line = "Java";
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine(search_line);
+        SearchPageObject.clickByArticleWithSubstring(search_line);
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject.waitForTitleElement();
+    }
 
 }
