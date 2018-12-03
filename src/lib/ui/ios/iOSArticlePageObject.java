@@ -10,6 +10,7 @@ public class iOSArticlePageObject extends ArticlePageObject {
         FOOTER_ELEMENT = "id:View article in browser";
         OPTIONS_ADD_TO_MY_LIST_BUTTON = "id:Save for later";
         CLOSE_ARTICLE_BUTTON = "id:Back";
+        TITLE_ELEMENT = "xpath://XCUIElementTypeLink";
     }
 
     public iOSArticlePageObject(AppiumDriver driver) {

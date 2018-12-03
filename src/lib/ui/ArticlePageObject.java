@@ -15,7 +15,8 @@ abstract public class ArticlePageObject extends MainPageObject {
             ADD_TO_MY_LIST_OVERLAY,
             MY_LIST_NAME_INPUT,
             MY_LIST_OK_BUTTON,
-            CLOSE_ARTICLE_BUTTON;
+            CLOSE_ARTICLE_BUTTON,
+            TITLE_ELEMENT;
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
@@ -33,6 +34,10 @@ abstract public class ArticlePageObject extends MainPageObject {
             return title_element.getAttribute("name");
         }
 
+    }
+
+    public int numberOfArticlesInMySaved() {
+        return this.getAmountOfElements(TITLE_ELEMENT);
     }
 
     public void swipeToFooter() {
